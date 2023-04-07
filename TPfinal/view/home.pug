@@ -1,0 +1,10 @@
+header
+    h1 Home
+    include nav.pug
+main
+    h1 test
+    div: form(action="/" method="POST")
+        div
+            input(name="name" type="text")
+            input(name="birth" type="date")
+        button(type="submit") Ajouter

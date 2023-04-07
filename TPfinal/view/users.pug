@@ -1,0 +1,9 @@
+header
+    meta(charset="UTF-8")
+    h1 Users 
+    include nav.pug
+main
+    h2 Users list 
+    div: ul 
+        each item in students
+            li #{item.name}, Né.e le #{item.birth}
