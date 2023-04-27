@@ -31,16 +31,18 @@ html(lang="fr")
                         h2 Channels
                         ul
                             li
-                                a.text-light(href="#", title="Accéder au channel Général") Général
+                                a#general.text-light(href="#", title="Accéder au channel Général") Général
                             li
-                                a.text-light(href="#", title="Accéder au channel Gaming") Gaming
+                                a#gaming.text-light(href="#", title="Accéder au channel Gaming") Gaming
                             li
-                                a.text-light(href="#", title="Accéder au channel Random") Random
+                                a#random.text-light(href="#", title="Accéder au channel Random") Random
                 
                 main.col-md-8(role="main")
                     form#chat
                         .form-group
                             input#message.form-control(type="text", placeholder="Tapez votre message ici ...", autofocus)
+                        
+                        ul#typing.list-group.list-group-flush
                         
                         ul#messages.list-group.list-group-flush
                 

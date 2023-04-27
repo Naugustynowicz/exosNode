@@ -33,8 +33,9 @@ class Client {
                 ...
             }
         */
+        this.socket.on('message:typing', (nickname) => this.typing(nickname));
         this.socket.on('message:new', ({nickname, message}) => this.receiveMessage(nickname, message));
-        this.socket.on('users:new', (users) => this.receiveUsers(users));
+        this.socket.on('users:new', (channel) => this.receiveUsers(channel));
     }
 
     /**
@@ -42,6 +43,10 @@ class Client {
      * (validation du formulaire, clic sur un channel ... etc)
      */
     init() {
+        this.$message.on('input', () => this.isTyping(this.nickname));
+        $('a#general').on("click", () => this.switchChannel("Général"));
+        $('a#gaming').on("click", () => this.switchChannel("Gaming"));
+        $('a#random').on("click", () => this.switchChannel("Random"));
         // À la soumission du formulaire, on envoie le contenu du message au serveur
         this.$form.on('submit', (event) => {
             event.preventDefault();
@@ -54,6 +59,26 @@ class Client {
         this.socket.emit('user:new', nickname);
     }
 
+    switchChannel(title){
+        this.socket.emit('channel:switch', title);
+    }
+
+    isTyping(nickname){
+        this.socket.emit('message:isTyping', nickname);
+    }
+
+    typing(nickname){
+        console.log("test0");
+        let template = "";
+        template = `<li class="list-group-item">
+                        <span>${nickname} est en train d'écrire...</span>
+                    </li>`;
+        $('ul#typing').html(template);
+        setTimeout(() => {
+            console.log("Test1 : " + $._data(this.socket, "message:typing"));
+            $('ul#typing').html("");
+        }, 5000);
+    }
     /**
      * Émet un message de ce client vers le serveur
      */
@@ -73,16 +98,19 @@ class Client {
                         ${message}
                     </li>`;
         this.$messages.prepend(html);
+        $('ul#typing').html("");
     }
 
-    receiveUsers(users) {
-        console.log("test1");
-        this.$users = $('ul#users');
-        users.forEach(user => {
-            const html = `<li class="list-group-item">
-                            ${user}
+    receiveUsers(nicknames) {
+        console.log("Client.receiveUsers.test0 : " + nicknames);
+        let template = "";
+        nicknames.forEach(nickname => {
+            console.log("Client.receiveUsers.test1 : " + nickname);
+            template += `<li class="list-group-item">
+                            ${nickname}
                         </li>`;
-            this.$users.prepend(html);
+            $('ul#users').html(template);
         })
+        this.$messages.html("");
     }
 }
